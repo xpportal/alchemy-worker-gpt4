@@ -1,6 +1,6 @@
 # Alchemy Worker
 
-Alchemy Worker is a Cloudflare Worker that performs string parsing and generates queries to inject personality and a desired prompt into GPT-3. This can be used to create more natural and engaging chatbot conversations.
+Alchemy Worker is a Cloudflare Worker that performs string parsing and generates queries to inject personality and a desired prompt into GPT-4 prompts. This can be used to create more natural and engaging chatbot conversations.
 
 ## Usage
 
@@ -62,8 +62,10 @@ Example js usage:
 		});
 		if (response.ok) {
 			const data = await response.json();
-			console.log("worker response", data);
-			props.setMessages([...props.messages, data]);
+			if(data?.model === "gpt-4-0314"){
+				let formattedMessage = 'Somename: ' + data.choices[0].message.content;
+				props.setMessages([...props.messages, inputMessageLog, formattedMessage]);
+			}
 		}
 ```
 
